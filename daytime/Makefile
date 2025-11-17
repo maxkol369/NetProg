@@ -1,17 +1,24 @@
 CC = gcc
-CFLAGS = -Wall -std=c99
-TARGET = daytime
-SOURCES = daytime.cpp
+CFLAGS = -Wall
+TARGETS = daytime daytime.cpp
 
-all: $(TARGET)
+all: $(TARGETS)
 
-$(TARGET): $(SOURCES)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
+daytime_client: daytime.cpp
+	$(CC) $(CFLAGS) -o $@ $<
+
+daytime_client_tcp: daytime_client_tcp.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGETS)
 
-test: $(TARGET)
-	./$(TARGET) time.nist.gov
+test: all
+	@echo "Testing connection to 172.16.40.1:13"
+	@echo "=== UDP Version ==="
+	./daytime_client
+	@echo ""
+	@echo "=== TCP Version ==="
+	./daytime_client_tcp
 
 .PHONY: all clean test
