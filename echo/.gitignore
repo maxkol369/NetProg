@@ -1,0 +1,6 @@
+/echo_client
+
+*.o
+
+*~
+*.bak
